@@ -16,13 +16,16 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd">
-
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/data/jpa
+       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+           
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.h2.Driver"/>
@@ -58,6 +61,8 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
     <tx:annotation-driven/>
+
+    <jpa:repositories base-package="net.tirasa.blog.springquartz.repository"/>
 
     <bean id="quartzDbInitializer" class="org.springframework.jdbc.datasource.init.DataSourceInitializer">
         <property name="dataSource" ref="dataSource"/>
@@ -108,20 +113,20 @@
         </property>
         <property name="triggers">
             <list>
-                <ref bean="caseArchiveSuspendedJobTrigger"/>
+                <ref bean="myJobTrigger"/>
             </list>
         </property>
     </bean>
 
-    <bean id="caseArchiveSuspendedJobTrigger"
-	  class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="myJobTrigger"
+	  class="org.springframework.scheduling.quartz.SimpleTriggerBean">
         <property name="jobDetail">
             <bean name="caseArchiveSuspendedJob" class="org.springframework.scheduling.quartz.JobDetailBean">
                 <property name="name" value="MyJob"/>
                 <property name="jobClass" value="net.tirasa.blog.springquartz.MyJob"/>
             </bean>
         </property>
-        <property name="cronExpression" value="0 0 6 * * ?"/>
+        <property name="repeatInterval" value="10000"/>
     </bean>
 
     <bean id="MyJob" class="net.tirasa.blog.springquartz.MyJob"/>

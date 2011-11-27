@@ -13,11 +13,14 @@
  */
 package net.tirasa.blog.springquartz;
 
+import net.tirasa.blog.springquartz.beans.SyncopeUser;
+import net.tirasa.blog.springquartz.repository.SyncopeUserRepository;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 public class MyJob implements StatefulJob {
@@ -28,11 +31,23 @@ public class MyJob implements StatefulJob {
     private static final Logger LOG = LoggerFactory.getLogger(
             MyJob.class);
 
+    @Autowired
+    private SyncopeUserRepository repository;
+
     @Override
     @Transactional
     public void execute(final JobExecutionContext context)
             throws JobExecutionException {
-        
-        LOG.info("SONO IO!");
+
+        LOG.info("At first, there are {} users", repository.count());
+
+        final SyncopeUser user1 = new SyncopeUser();
+        user1.setUsername("user1");
+        user1.setPassword("password1");
+        final SyncopeUser saved1 = repository.save(user1);
+
+        LOG.info("Before saving: {}; after saving: {}", user1, saved1);
+
+        LOG.info("Now, there are {} users", repository.count());
     }
 }

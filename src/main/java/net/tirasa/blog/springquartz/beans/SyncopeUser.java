@@ -13,13 +13,14 @@
  */
 package net.tirasa.blog.springquartz.beans;
 
-import com.sun.istack.internal.NotNull;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 public class SyncopeUser implements Serializable {
@@ -31,7 +32,7 @@ public class SyncopeUser implements Serializable {
     @Column(unique = true)
     private String username;
 
-    @NotNull
+    @Column(nullable = false)
     private String password;
 
     public Long getId() {
@@ -42,7 +43,7 @@ public class SyncopeUser implements Serializable {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -50,7 +51,13 @@ public class SyncopeUser implements Serializable {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this,
+                ToStringStyle.MULTI_LINE_STYLE);
     }
 }
