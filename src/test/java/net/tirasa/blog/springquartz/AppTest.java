@@ -1,7 +1,8 @@
 package net.tirasa.blog.springquartz;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import net.tirasa.blog.springquartz.beans.SyncopeUser;
 import net.tirasa.blog.springquartz.repository.SyncopeUserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,16 +13,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-    "classpath:applicationContext.xml"
-})
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 public class AppTest {
 
     /**
      * Logger.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(
-            AppTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AppTest.class);
 
     @Autowired
     private SyncopeUserRepository repository;
@@ -39,5 +37,17 @@ public class AppTest {
 
         assertEquals(1, repository.count());
         LOG.info("After Quartz job run, {} objects stored", repository.count());
+    }
+
+    @Test
+    public void extendedRepo() {
+        SyncopeUser user = new SyncopeUser();
+        user.setPassword("password");
+        user.setUsername("username");
+        user = repository.save(user);
+        assertNotNull(user);
+
+        final SyncopeUser another = repository.uselessMethod(user);
+        assertEquals(user, another);
     }
 }

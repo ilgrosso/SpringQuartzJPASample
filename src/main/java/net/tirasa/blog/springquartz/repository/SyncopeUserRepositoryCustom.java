@@ -14,7 +14,8 @@
 package net.tirasa.blog.springquartz.repository;
 
 import net.tirasa.blog.springquartz.beans.SyncopeUser;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SyncopeUserRepository extends JpaRepository<SyncopeUser, Long>, SyncopeUserRepositoryCustom {
+public interface SyncopeUserRepositoryCustom {
+
+    SyncopeUser uselessMethod(SyncopeUser user);
 }
