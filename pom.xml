@@ -33,7 +33,7 @@
   </licenses>
     
   <properties>
-    <spring.version>3.1.2.RELEASE</spring.version>
+    <spring.version>5.2.7.RELEASE</spring.version>
     <spring-data.version>1.1.1.RELEASE</spring-data.version>
     <quartz.version>2.3.2</quartz.version>
 
